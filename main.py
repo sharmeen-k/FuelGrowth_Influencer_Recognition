@@ -8,9 +8,10 @@ from urllib.request import urlopen
 from multiprocessing import Pool, Manager, cpu_count
 
 # Directory to store face dataset
-res = np.zeros((300, 300)) # first index = face number, second = performance
 DATASET_DIR = "face_dataset"
 os.makedirs(DATASET_DIR, exist_ok=True)
+# CSV file to store performance
+PERFORMANCE_CSV = os.path.join(DATASET_DIR, "performance.csv")
 
 def download_video(url: str) -> str:
     # Download video from URL and save locally for temporary usage 
@@ -70,7 +71,7 @@ def match_and_save(encoding, performance, face_id_counter):
             if face_recognition.compare_faces([stored_encoding], encoding, tolerance=0.6)[0]:
                 print("Found a match")
                 np.save(os.path.join(DATASET_DIR, file), stored_encoding)
-                res[face_id_counter.value, ]
+                save_performance(face_id_counter.value, performance)
                 return True
     print("No match")
     return False
@@ -83,26 +84,23 @@ def save_new_face(encoding, performance, face_id_counter, lock):
         face_path = os.path.join(DATASET_DIR, f"face_{face_id_counter.value}.npy")
         print(f"Saving face encoding to: {face_path}")
         np.save(face_path, encoding)
-        res[face_id_counter.value, 0] = performance
+        save_performance(face_id_counter.value, performance)
         print(f"New face saved as face_{face_id_counter.value}")
 
-def performance_average():
-    print("Moving on to performance averaging...")
-    FACE_AVG = []
-    for file in os.listdir(DATASET_DIR):
-        if file.endswith(".npy"):
-            face = np.load(os.path.join(DATASET_DIR, file), allow_pickle=True)
-            print("Face file:", file)
-            avg = np.mean(face[128:])
-            FACE_AVG.append({'Name': file, 'Avg_performance': avg})
-            facelist = face.tolist()
-            facelist.append(avg)
-            face = np.array(facelist)
-            np.save(os.path.join(DATASET_DIR, file), face)
-            print("Performance:", avg)
-    avg_file = os.path.join(DATASET_DIR, f"Performance.npy")
-    np.save(avg_file, np.asarray(FACE_AVG))
-    print("Done saving the performance file")
+def initialize_performance_csv():
+    # Creates a csv file to record performance for detected faces
+    if not os.path.exists(PERFORMANCE_CSV):
+        with open(PERFORMANCE_CSV, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Face_ID", "Performance"])
+            print("New performance csv created")
+
+def save_performance(face_id, performance):
+    # Saves data in the csv file
+    print("Saving performance record for", face_id)
+    with open(PERFORMANCE_CSV, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([face_id, performance])
 
 def main(video_urls, performancevalues):
     manager = Manager()
@@ -113,10 +111,10 @@ def main(video_urls, performancevalues):
         print("Current working directory:", os.getcwd())
         pool.starmap(process_video, [(url, performance, face_id_counter, lock) for url, performance in zip(video_urls, performancevalues)])
         print("All faces identified and registered")
-        performance_average()
 
 if __name__ == "__main__":
     ds = pd.read_csv(r'C:\Users\Sharmeen\Desktop\FuelGrowth_Assignment\Assignment_Data.csv')
     video_urls = ds['Video URL'].tolist() 
     performancevalues = ds['Performance'].tolist()
+    initialize_performance_csv()
     main(video_urls, performancevalues)
