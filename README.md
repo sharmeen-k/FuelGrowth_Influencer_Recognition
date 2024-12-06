@@ -4,7 +4,7 @@ This project processes a dataset of videos to identify influencers by detecting 
 
 ## Features
 **Face Detection and Encoding:** Detects unique faces from video frames and encodes them for further analysis.  
-**Influencer Performance Analysis:** Analyzes engagement metrics like views, likes, and shares to calculate performance.  
+**Influencer Performance Analysis:** Analyzes the raw performance data for every encoding.  
 **Ranking System:** Creates a ranked list of influencers based on engagement data.
 
 ## Files and Structure
@@ -16,8 +16,9 @@ This project processes a dataset of videos to identify influencers by detecting 
 **Influencer_Ranking.csv:** Outputs the ranked list of influencers based on engagement performance.  
 
 ## Workflow
-**1. Dataset Initialization:** Assignment_Data.csv provides video links and their associated performance data.
-  
+**1. Dataset Initialization:**  
+Initializes performance.csv to store performance data for encodings. Assignment_Data.csv provides video links and their associated performance data.  
+
 **2. Video Processing:**
 Extracts frames from videos.
 Detects and encodes faces using face_recognition.
