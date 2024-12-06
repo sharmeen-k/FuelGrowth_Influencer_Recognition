@@ -53,7 +53,7 @@ def process_video(url: str, performance, face_id_counter, lock):
             encodings = face_recognition.face_encodings(frame)
             for encoding in encodings:
                 if not match_and_save(encoding, performance, face_id_counter):
-                    save_new_face(encoding, performance, face_id_counter, lock)
+                    save_new_face(encoding, performance, url, face_id_counter, lock)
     except Exception as e:
         print(f"Error processing video {url}: {e}")
     finally:
@@ -76,7 +76,7 @@ def match_and_save(encoding, performance, face_id_counter):
     print("No match")
     return False
 
-def save_new_face(encoding, performance, face_id_counter, lock):
+def save_new_face(encoding, performance, url, face_id_counter, lock):
     # Save a new face encoding to the dataset
     print("Saving new face")
     with lock:
@@ -84,7 +84,7 @@ def save_new_face(encoding, performance, face_id_counter, lock):
         face_path = os.path.join(DATASET_DIR, f"face_{face_id_counter.value}.npy")
         print(f"Saving face encoding to: {face_path}")
         np.save(face_path, encoding)
-        save_performance(face_id_counter.value, performance)
+        save_performance(face_id_counter.value, performance, url=url)
         print(f"New face saved as face_{face_id_counter.value}")
 
 def initialize_performance_csv():
@@ -92,15 +92,15 @@ def initialize_performance_csv():
     if not os.path.exists(PERFORMANCE_CSV):
         with open(PERFORMANCE_CSV, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["Face_ID", "Performance"])
+            writer.writerow(["Face_ID", "Performance", "Video URL"])
             print("New performance csv created")
 
-def save_performance(face_id, performance):
+def save_performance(face_id, performance, url=None):
     # Saves data in the csv file
     print("Saving performance record for", face_id)
     with open(PERFORMANCE_CSV, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([face_id, performance])
+        writer.writerow([face_id, performance, url])
 
 def main(video_urls, performancevalues):
     manager = Manager()
