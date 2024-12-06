@@ -14,17 +14,17 @@ This project processes a dataset of videos to identify influencers by detecting 
 **Influencer_Ranking.csv:** Outputs the ranked list of influencers based on engagement performance.  
 
 ## Workflow
-1. Dataset Initialization: Assignment_Data.csv provides video links and their associated performance data.
+**1. Dataset Initialization:** Assignment_Data.csv provides video links and their associated performance data.
   
-2. Video Processing:
+**2. Video Processing:**
 Extracts frames from videos.
 Detects and encodes faces using face_recognition.
 Matches or saves new faces in the face_dataset directory.
 
-3. Performance Recording:
+**3. Performance Recording:**
 Saves engagement metrics for identified faces in performance.csv.
 
-4. Ranking:
+**4. Ranking:**
 Generates Influencer_Ranking.csv to summarize influencer performance.
 
 ## Setup and Execution
