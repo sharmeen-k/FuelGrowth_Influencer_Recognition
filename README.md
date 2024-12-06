@@ -10,9 +10,9 @@ This project processes a dataset of videos to identify influencers by detecting 
 ## Files and Structure
 **Assignment_Data.csv:** Dataset used. Contains video URLs and performance metrics for analysis.  
 **main.py:** Main script that processes videos, detects faces, and manages performance records in face_dataset.  
-**face_dataset:** Directory for storing encodings of all the faces identified during the operation of main.py. Also stores the performance.csv file containing performance data for each face in every video.  
+**face_dataset:** Directory for storing encodings of all the faces identified during the operation of main.py. Also stores the performance.csv file containing performance data and the URL for each unique face in every video.  
 **face_dataset_processing.ipynb:** Jupyter Notebook for final face dataset processing and output.  
-**Cleaned_Dataset.csv:** Cleaned version of performance.csv  
+**top_influencer.jpg:** Image of the highest performing influencer.
 **Influencer_Ranking.csv:** Outputs the ranked list of influencers based on engagement performance.  
 
 ## Workflow
@@ -50,9 +50,10 @@ python main.py
 
 Ensure Assignment_Data.csv is in the working directory.
 
-## Outputs
-**performance.csv:** Stores engagement metrics for each identified face. Raw output dataset.  
-**Influencer_Ranking.csv:** Final ranking of influencers based on their performance. Final processed dataset.
+## Outputs  
+**top_influencer.jpg:** Image of the best-performing influencer.  
+**Influencer_Ranking.csv:** Final ranking of influencers based on their performance. Final processed dataset.  
+**face_dataset/performance.csv:** Stores engagement metrics for each identified face with URL. Raw output dataset.  
 
 ## Future Enhancements
 Optimization for parallel processing on large video datasets.  
