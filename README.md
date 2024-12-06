@@ -49,7 +49,7 @@ Ensure Assignment_Data.csv is in the working directory.
 
 ## Outputs
 **performance.csv:** Stores engagement metrics for each identified face. Raw output dataset.  
-**Influencer_Ranking.csv:** Final ranking of influencers based on their performance. Processed dataset.
+**Influencer_Ranking.csv:** Final ranking of influencers based on their performance. Final processed dataset.
 
 ## Future Enhancements
 Optimization for parallel processing on large video datasets.  
@@ -59,5 +59,5 @@ Improved ranking models incorporating advanced metrics.
 This project uses the following libraries:
 
 OpenCV for video processing.  
-face_recognition for facial detection and encoding.
+face_recognition for facial detection and encoding.  
 Pandas for data manipulation.
